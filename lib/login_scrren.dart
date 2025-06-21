@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fyppaperless/layouthelper/button.dart';
+import 'package:fyppaperless/layouthelper/dropdown.dart';
 import 'package:fyppaperless/layouthelper/textfieldwidget.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -10,9 +12,14 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
     TextEditingController emailController = TextEditingController();
+    TextEditingController rollNumber = TextEditingController();
+    // List
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+
           MyTextField(
             mycontroller: nameController,
             hinttext: "Enter Your Name",
@@ -20,7 +27,9 @@ class LoginScreen extends StatelessWidget {
           MyTextField(
             mycontroller: emailController,
             hinttext: "Enter Your Email",
-          )
+          ),
+        
+        
         ],
       ),
     );

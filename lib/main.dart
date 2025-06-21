@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: HomeScreen.id,
+      initialRoute: SignupScreen.id,
       routes: {
         LoginScreen.id: (context) => const LoginScreen(),
         HomeScreen.id: (context) => const HomeScreen(),
