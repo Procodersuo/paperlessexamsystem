@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 class MyTextField extends StatelessWidget {
   final TextEditingController? mycontroller;
   final String? hinttext;
-  const MyTextField({super.key, required this.mycontroller, this.hinttext});
+  final Icon? sfxIcon;
+  const MyTextField(
+      {super.key, required this.mycontroller, this.hinttext, this.sfxIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +14,7 @@ class MyTextField extends StatelessWidget {
       child: TextFormField(
         controller: mycontroller,
         decoration: InputDecoration(
+            suffixIcon: sfxIcon,
             hintText: hinttext,
             contentPadding: const EdgeInsets.all(8),
             focusedBorder: const OutlineInputBorder(

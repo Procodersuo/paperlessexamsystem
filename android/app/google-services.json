@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "144887236542",
+    "project_id": "fyppaperlessexam-fdccd",
+    "storage_bucket": "fyppaperlessexam-fdccd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:144887236542:android:307c67b7331b46b06e5bef",
+        "android_client_info": {
+          "package_name": "com.example.fyppaperless"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjh4pHF8ZHOctIoVqq5q2A7RcNiuNEaUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

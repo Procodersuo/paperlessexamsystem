@@ -4,17 +4,19 @@ class MyButton extends StatelessWidget {
   final Color? bgColor;
   final Color? foregrngColor;
   final String myText;
+  final VoidCallback? onTap;
   const MyButton(
       {super.key,
       required this.bgColor,
       required this.foregrngColor,
-      required this.myText});
+      required this.myText,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
-        // Your button action here
+      onPressed: () async {
+        onTap!();
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: bgColor, // Background color

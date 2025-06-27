@@ -1,39 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:fyppaperless/authcontrollers/forgetpassword.dart';
 import 'package:fyppaperless/layouthelper/button.dart';
 import 'package:fyppaperless/layouthelper/textfieldwidget.dart';
+import 'package:get/get.dart';
 
-class LoginScreen extends StatelessWidget {
-  static const id = "LoginScreen";
-
-  const LoginScreen({super.key});
+class Forgetpassword extends StatelessWidget {
+  const Forgetpassword({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    // List
+    TextEditingController forgetPassword = TextEditingController();
+    final ForgetpasswordController controller =
+        Get.put(ForgetpasswordController());
+
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           MyTextField(
-            mycontroller: nameController,
+            mycontroller: forgetPassword,
             hinttext: "Enter Your Email",
-          ),
-          MyTextField(
-            mycontroller: emailController,
-            hinttext: "Enter Your Password",
           ),
           const SizedBox(
             height: 50,
           ),
-           MyButton(
+          MyButton(
               bgColor: Colors.blue,
               foregrngColor: Colors.white,
-              myText: "LOGIN",
-              onTap: (){},)
+              myText: "Forget Password",
+              onTap: () {
+                controller.forgetPassword(
+                    email: forgetPassword.text.toString());
+              })
         ],
       ),
     );
