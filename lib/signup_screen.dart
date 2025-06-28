@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fyppaperless/authcontrollers/signup_controller.dart';
-import 'package:fyppaperless/login_scrren.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'layouthelper/textfieldwidget.dart';
@@ -8,8 +7,11 @@ import 'layouthelper/dropdown.dart';
 import 'layouthelper/button.dart';
 
 class SignupScreen extends StatelessWidget {
-  static const id = "SignupScreen";
-  SignupScreen({super.key});
+  static const id = "/SignupScreen";
+  SignupScreen({
+    super.key,
+  });
+
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController rollNumberController = TextEditingController();
@@ -44,7 +46,7 @@ class SignupScreen extends StatelessWidget {
           MyTextField(
             mycontroller: passwordController,
             hinttext: "Password",
-            sfxIcon: const Icon(Icons.hide_image),
+            isPassword: true,
           ),
           Row(
             children: [
@@ -103,7 +105,7 @@ class SignupScreen extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              Get.to(const LoginScreen());
+              Get.offNamed('/LoginScreen');
             },
             child: Text(
               "Login ",
