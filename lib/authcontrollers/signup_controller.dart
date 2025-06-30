@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fyppaperless/login_scrren.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +22,6 @@ class SignupController extends GetxController {
         semester.isEmpty ||
         section.isEmpty ||
         password.isEmpty) {
-      
       Get.snackbar("Erro", "Please Fill All The Fields",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
@@ -30,6 +30,7 @@ class SignupController extends GetxController {
       return;
     }
     try {
+      EasyLoading.show();
       final userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       await userCredential.user?.sendEmailVerification();
@@ -41,11 +42,12 @@ class SignupController extends GetxController {
         'Section': section,
         'Roll Number': roll
       });
-
+      EasyLoading.dismiss();
       Get.snackbar("Success", "Verification email sent to $email");
       FirebaseAuth.instance.signOut();
       Get.to(const LoginScreen());
     } on FirebaseAuthException catch (e) {
+       EasyLoading.dismiss();
       Get.snackbar('Signup Failed', e.message ?? 'Unknown error');
     } finally {}
   }

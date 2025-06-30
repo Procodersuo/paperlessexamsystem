@@ -7,14 +7,15 @@ class MyTextField extends StatelessWidget {
   final String? hinttext;
   final Icon? sfxIcon;
   final bool isPassword;
+  final int lines;
 
-  const MyTextField({
-    super.key,
-    required this.mycontroller,
-    this.hinttext,
-    this.sfxIcon,
-    this.isPassword = false,
-  });
+  const MyTextField(
+      {super.key,
+      required this.mycontroller,
+      this.hinttext,
+      this.sfxIcon,
+      this.isPassword = false,
+      this.lines = 1});
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +47,7 @@ class MyTextField extends StatelessWidget {
                 ),
               ))
           : TextFormField(
+              maxLines: lines,
               controller: mycontroller,
               obscureText: false,
               decoration: InputDecoration(

@@ -11,7 +11,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
     TextEditingController emailController = TextEditingController();
 
     Logincontroller controller = Get.put(Logincontroller());
@@ -23,11 +23,11 @@ class LoginScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           MyTextField(
-            mycontroller: nameController,
+            mycontroller: emailController,
             hinttext: "Enter Your Email",
           ),
           MyTextField(
-            mycontroller: emailController,
+            mycontroller: passwordController,
             hinttext: "Enter Your Password",
             isPassword: true,
           ),
@@ -39,9 +39,10 @@ class LoginScreen extends StatelessWidget {
             foregrngColor: Colors.white,
             myText: "LOGIN",
             onTap: () {
+              // Easy LOADING will be managed later
               controller.login(
-                  email: nameController.toString(),
-                  password: emailController.toString());
+                  email: emailController.text.trim(),
+                  password: passwordController.text.trim());
             },
           ),
           const SizedBox(
