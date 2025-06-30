@@ -4,10 +4,8 @@ import 'package:get/get.dart';
 class Datetimepicker extends GetxController {
   final Rx<DateTime?> visibleAt = Rx<DateTime?>(null);
 
-  /// Show date & time picker and update `visibleAt`
   Future<void> pickVisibleTime() async {
-    final ctx = Get.context!; // ✅ Safe GetX context
-
+    final ctx = Get.context!;
     final pickedDate = await showDatePicker(
       context: ctx,
       initialDate: DateTime.now(),

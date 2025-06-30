@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fyppaperless/attemptingscreen.dart';
 import 'package:fyppaperless/firebase_options.dart';
 import 'package:fyppaperless/home_screen.dart';
 import 'package:fyppaperless/login_scrren.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
           name: PaperUploadScreen.id,
           page: () => PaperUploadScreen(),
         ),
+        GetPage(name: AttemptScreen.id, page: () => AttemptScreen()),
       ],
     );
   }

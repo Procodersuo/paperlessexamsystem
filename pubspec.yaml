@@ -41,6 +41,8 @@ dependencies:
   cloud_firestore:
   get:
   flutter_easyloading:
+  get_storage: 
+  speech_to_text: 
 
 
 dev_dependencies:

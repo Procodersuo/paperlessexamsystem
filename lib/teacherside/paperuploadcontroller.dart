@@ -13,7 +13,6 @@ class UploadController extends GetxController {
     required List<Map<String, TextEditingController>> qaList,
     required DateTime? visibleAt,
   }) async {
-    print(visibleAt);
     if (visibleAt == null) {
       Get.snackbar("Error", "Please select a release time");
       return;

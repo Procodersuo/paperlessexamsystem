@@ -1,35 +1,63 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AttemptController extends GetxController {
-  final RxList<Map<String, dynamic>> papers = <Map<String, dynamic>>[].obs;
-  final RxBool isLoading = false.obs;
+  final RxBool isLoading = true.obs;
+  final Rxn<Map<String, dynamic>> paper = Rxn<Map<String, dynamic>>();
+  final List<TextEditingController> answerControllers = [];
 
-  Future<void> fetchAvailablePapers({
-    required String department,
-    required String semester,
-    required String section,
-  }) async {
-    isLoading.value = true;
-    try {
-      final now = Timestamp.now();
+  late Stream<QuerySnapshot> paperStream;
 
-      final query = await FirebaseFirestore.instance
-          .collection('papers')
-          .where('department', isEqualTo: department)
-          .where('semester', isEqualTo: semester)
-          .where('section', isEqualTo: section)
-          .where('visibleAt', isLessThanOrEqualTo: now)
-          .get();
+  @override
+  void onInit() {
+    super.onInit();
+    setupPaperStream();
+  }
 
-      papers.clear();
-      for (var doc in query.docs) {
-        papers.add(doc.data());
-      }
-    } catch (e) {
-      Get.snackbar("Error", "Failed to load papers");
-    } finally {
-      isLoading.value = false;
+  Future<void> loadUserData() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+
+    final doc = await FirebaseFirestore.instance
+        .collection("Studentsdata")
+        .doc(uid)
+        .get();
+    if (doc.exists) {
+      final data = doc.data()!;
+      final box = GetStorage();
+      box.write("student_department", data["department"]);
+      box.write("student_semester", data["semester"]);
+      box.write("student_section", data["section"]);
+    }
+  }
+
+  void setupPaperStream() {
+    final box = GetStorage();
+    final String department = box.read("student_department") ?? "";
+    final String semester = box.read("student_semester") ?? "";
+    final String section = box.read("student_section") ?? "";
+
+    final now = Timestamp.now();
+    print("🕓 Current Device Time: ${DateTime.now()}");
+
+    paperStream = FirebaseFirestore.instance
+        .collection("papers")
+        .where("department", isEqualTo: department)
+        .where("semester", isEqualTo: semester)
+        .where("section", isEqualTo: section)
+        .limit(1)
+        .snapshots(); // 🔁 Real-time stream
+  }
+
+  /// Use this to update controllers when the paper arrives
+  void updateControllersFromPaper(Map<String, dynamic> paperData) {
+    final List questions = paperData["questions"];
+    answerControllers.clear();
+    for (int i = 0; i < questions.length; i++) {
+      answerControllers.add(TextEditingController());
     }
   }
 }

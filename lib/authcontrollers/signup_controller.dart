@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fyppaperless/login_scrren.dart';
 import 'package:get/get.dart';
-
+import 'package:get_storage/get_storage.dart';
 class SignupController extends GetxController {
   Future<void> signup(
       {required String name,
@@ -22,7 +22,7 @@ class SignupController extends GetxController {
         semester.isEmpty ||
         section.isEmpty ||
         password.isEmpty) {
-      Get.snackbar("Erro", "Please Fill All The Fields",
+      Get.snackbar("Error", "Please Fill All The Fields",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           snackStyle: SnackStyle.FLOATING,
@@ -34,21 +34,28 @@ class SignupController extends GetxController {
       final userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       await userCredential.user?.sendEmailVerification();
-
-      await FirebaseFirestore.instance.collection("StudentsData").doc().set({
+       final uid = FirebaseAuth.instance.currentUser?.uid;
+  if (uid == null) return;
+      await FirebaseFirestore.instance.collection("StudentsData").doc(uid).set({
         'Name': name,
         'Email': email,
         'department': department,
         'Section': section,
-        'Roll Number': roll
-      });
+        'Roll Number': roll,
+        'semester':semester
+      }
+      );
       EasyLoading.dismiss();
       Get.snackbar("Success", "Verification email sent to $email");
       FirebaseAuth.instance.signOut();
+      final box = GetStorage();
+      box.write("student_department", department);
+      box.write("student_semester", semester);
+      box.write("student_section", section);
       Get.to(const LoginScreen());
     } on FirebaseAuthException catch (e) {
-       EasyLoading.dismiss();
+      EasyLoading.dismiss();
       Get.snackbar('Signup Failed', e.message ?? 'Unknown error');
-    } finally {}
+    } 
   }
 }
