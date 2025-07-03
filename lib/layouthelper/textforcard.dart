@@ -12,7 +12,7 @@ class MyTextWidget extends StatelessWidget {
       child: Text(
         myText,
         style: GoogleFonts.poppins(
-          textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
         ),
       ),
     );

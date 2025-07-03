@@ -11,7 +11,7 @@ class Logincontroller extends GetxController {
       User? user = userCredential.user;
       EasyLoading.dismiss();
       if (user!.emailVerified) {
-        Get.offNamed('/AttemptingScreen');
+        Get.offNamed('/StudentHomeScreen');
       } else {
         EasyLoading.dismiss();
         FirebaseAuth.instance.signOut();

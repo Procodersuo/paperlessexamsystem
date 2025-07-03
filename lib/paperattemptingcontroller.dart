@@ -14,6 +14,7 @@ class AttemptController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    loadUserData();
     setupPaperStream();
   }
 
@@ -46,14 +47,11 @@ class AttemptController extends GetxController {
     paperStream = FirebaseFirestore.instance
         .collection("papers")
         .where("department", isEqualTo: "BSSE")
-        .where("semester", isEqualTo: "1")
+        .where("semester", isEqualTo: "8")
         .where("section", isEqualTo: "M")
         .where("visibleAt", isLessThanOrEqualTo: now)
         .orderBy("visibleAt", descending: true)
-        .limit(1)
         .snapshots();
-
-    // 🔁 Real-time stream
   }
 
   /// Use this to update controllers when the paper arrives

@@ -14,7 +14,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(const MyApp());
 }
 
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: SignupScreen.id, page: () => SignupScreen()),
         GetPage(name: LoginScreen.id, page: () => const LoginScreen()),
-        GetPage(name: HomeScreen.id, page: () => const HomeScreen()),
+        GetPage(name: StudnetHomeScreen().id, page: () => StudnetHomeScreen()),
         GetPage(
           name: PaperUploadScreen.id,
           page: () => PaperUploadScreen(),
