@@ -48,7 +48,7 @@ class UploadController extends GetxController {
         'title': paperTitle,
         'questions': questions,
         'createdAt': FieldValue.serverTimestamp(),
-        'visibleAt': Timestamp.fromDate(visibleAt),
+        'visibleAt': Timestamp.fromDate(visibleAt.toUtc()),
       });
 
       Get.snackbar("Success", "Paper uploaded successfully ✅");

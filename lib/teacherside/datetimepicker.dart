@@ -28,6 +28,6 @@ class Datetimepicker extends GetxController {
       pickedDate.day,
       pickedTime.hour,
       pickedTime.minute,
-    ).toUtc();
+    );
   }
 }
