@@ -96,22 +96,49 @@ class SignupScreen extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Text(
-            "Already Have an Account",
-            style: GoogleFonts.poppins(
-              textStyle:
-                  const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Already Have an Account",
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                      fontSize: 12, fontWeight: FontWeight.w600),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              InkWell(
+                onTap: () {
+                  Get.offNamed('/LoginScreen');
+                },
+                child: Text(
+                  "Login",
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.blue),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
           ),
           InkWell(
             onTap: () {
-              Get.offNamed('/LoginScreen');
+              Get.offNamed('/TeacherSignupScreen');
             },
             child: Text(
-              "Login ",
+              "Signup As Teacher",
               style: GoogleFonts.poppins(
-                textStyle:
-                    const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                textStyle: const TextStyle(
+                    color: Colors.blue,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600),
               ),
             ),
           ),

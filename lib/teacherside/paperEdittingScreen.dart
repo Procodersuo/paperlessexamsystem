@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fyppaperless/layouthelper/textfieldwidget.dart';
-import 'package:fyppaperless/paperattemptingcontroller.dart';
+import 'package:fyppaperless/teacherside/tpapereditcontroler.dart';
 import 'package:get/get.dart';
 
-class AttemptScreen extends StatelessWidget {
-  static const id = "/AttemptingScreen";
-  final AttemptController controller = Get.put(AttemptController());
+class PaperEdittingScreen extends StatelessWidget {
+  static const id = "/PaperEdittingScreen";
+  final Tpapereditcontroler controller = Get.put(Tpapereditcontroler());
 
-  AttemptScreen({super.key});
+  PaperEdittingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +38,14 @@ class AttemptScreen extends StatelessWidget {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Q${index + 1}: ${questions[index]["question"]}"),
+                      Text("Q${index + 1}"),
+                      MyTextField(
+                        mycontroller: controller.qaList[index]['question'],
+                      ),
+                      Text("Answer${index + 1}"),
                       const SizedBox(height: 8),
                       MyTextField(
-                        mycontroller: controller.answerControllers[index],
-                        hinttext: "Write Your Answer Here ",
+                        mycontroller: controller.qaList[index]['answer'],
                         lines: 5,
                       ),
                       const SizedBox(height: 20),
@@ -58,27 +61,26 @@ class AttemptScreen extends StatelessWidget {
                   EasyLoading.show();
                   final paperData = controller.paper.value!;
                   final paperId = paperData['id'];
-                  final teacherId = paperData['teacherId'];
-
-                  final studentId = controller.currentUserId();
-                  final answers =
-                      controller.answerControllers.map((e) => e.text).toList();
+                  final List<Map<String, String>> updatedQuestionsAnswers =
+                      controller.qaList.map((qa) {
+                    return {
+                      'question': qa['question']!.text.trim(),
+                      'answer': qa['answer']!.text.trim(),
+                    };
+                  }).toList();
 
                   await FirebaseFirestore.instance
-                      .collection("submissions")
+                      .collection("papers")
                       .doc(paperId)
-                      .collection("StudentsPaperssubmissions")
-                      .doc(studentId)
-                      .set({
-                    'answers': answers,
+                      .update({
+                    'questions': updatedQuestionsAnswers,
                     'submittedAt': FieldValue.serverTimestamp(),
-                    'studentId': studentId,
-                    'teacherId': teacherId,
                   });
+
                   EasyLoading.dismiss();
 
-                  Get.snackbar("Submitted",
-                      "Your paper has been submitted successfully");
+                  Get.snackbar(
+                      "Submitted", "Your paper has been Edited successfully");
                   Get.back();
                 } on FirebaseException catch (e) {
                   EasyLoading.dismiss();
@@ -86,7 +88,7 @@ class AttemptScreen extends StatelessWidget {
                 }
                 // or navigate to home screen
               },
-              child: const Text("Submit Answers"),
+              child: const Text("Done"),
             ),
           ],
         ),

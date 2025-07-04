@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:fyppaperless/layouthelper/button.dart';
 import 'package:fyppaperless/layouthelper/textforcard.dart';
 import 'package:fyppaperless/paperattemptingcontroller.dart';
+import 'package:fyppaperless/teacherside/tpapereditcontroler.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class StudnetHomeScreen extends StatelessWidget {
-  final String id = "/StudentHomeScreen";
-  final AttemptController controller = Get.put(AttemptController());
+class UploadedPaperViewScreen extends StatelessWidget {
+  static String id = "/UploadedPaperViewScreen";
+  final Tpapereditcontroler controller = Get.put(Tpapereditcontroler());
 
-  StudnetHomeScreen({super.key});
+  UploadedPaperViewScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,9 +75,6 @@ class StudnetHomeScreen extends StatelessWidget {
                                             myText:
                                                 paperData['title'] ?? "N/A"),
                                         const SizedBox(height: 4),
-                                        MyTextWidget(
-                                            myText: paperData['teacherId'] ??
-                                                "N/A"),
                                         const SizedBox(height: 4),
                                         MyTextWidget(
                                           myText: (paperData['visibleAt']
@@ -105,34 +103,22 @@ class StudnetHomeScreen extends StatelessWidget {
                                     MyButton(
                                       bgColor: Colors.green,
                                       foregrngColor: Colors.white,
-                                      myText: "Attempt",
+                                      myText: "Edit Paper",
                                       onTap: () async {
-                                        final serverTime =
-                                            await controller.getServerTime();
-                                        final releaseTime =
-                                            (paperData['visibleAt']
-                                                    as Timestamp)
-                                                .toDate();
-
-                                        if (serverTime.isAfter(releaseTime)) {
-                                          controller.updateControllersFromPaper(
-                                              paperData);
-                                          Get.toNamed("/AttemptingScreen",
-                                              arguments: paperData);
-                                        } else {
-                                          Get.snackbar("Error",
-                                              "You Can Only Attemp Paper ON Release Time");
-                                        }
+                                        controller.updateControllersFromPaper(
+                                            paperData);
+                                        Get.toNamed("/PaperEdittingScreen",
+                                            arguments: paperData);
                                       },
                                     ),
                                     const SizedBox(width: 30),
                                     MyButton(
                                       bgColor: Colors.red,
                                       foregrngColor: Colors.white,
-                                      myText: "Cancel",
+                                      myText: "Delete",
                                       onTap: () {
                                         Get.snackbar("Cancelled",
-                                            "You cancelled the attempt.");
+                                            "Delete Logic Will be Applied");
                                       },
                                     ),
                                   ],

@@ -3,6 +3,7 @@ import 'package:fyppaperless/authcontrollers/logincontroller.dart';
 import 'package:fyppaperless/layouthelper/button.dart';
 import 'package:fyppaperless/layouthelper/textfieldwidget.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatelessWidget {
   static const id = "/LoginScreen";
@@ -48,21 +49,34 @@ class LoginScreen extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          RichText(
-            text: const TextSpan(
-              text: "Already have an account? ",
-              style: TextStyle(color: Colors.black, fontSize: 14),
-              children: [
-                TextSpan(
-                  text: "Login",
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Already Have an Account ?",
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                      fontSize: 13, fontWeight: FontWeight.w600),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              InkWell(
+                onTap: () {
+                  Get.offNamed('/SignupScreen');
+                },
+                child: Text(
+                  "Signup",
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.blue),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           )
         ],
       ),

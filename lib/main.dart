@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -6,25 +7,48 @@ import 'package:fyppaperless/firebase_options.dart';
 import 'package:fyppaperless/home_screen.dart';
 import 'package:fyppaperless/login_scrren.dart';
 import 'package:fyppaperless/signup_screen.dart';
+import 'package:fyppaperless/teacherside/paperEdittingScreen.dart';
+import 'package:fyppaperless/teacherside/teacherhomescreen.dart';
+import 'package:fyppaperless/teacherside/teachersignupscreen.dart';
+import 'package:fyppaperless/teacherside/paperviewscreen.dart';
 import 'package:fyppaperless/teacherside/uploadpaper.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  await GetStorage.init();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final box = GetStorage();
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final role = box.read("role");
+
+    String initialRoute;
+
+    if (user != null && user.emailVerified) {
+      if (role == "teacher") {
+        initialRoute = '/TeacherHomeScreen';
+      } else if (role == "stu") {
+        initialRoute = '/StudentHomeScreen';
+      } else {
+        initialRoute = '/LoginScreen'; // fallback
+      }
+    } else {
+      initialRoute = '/LoginScreen';
+    }
     return GetMaterialApp(
       builder: EasyLoading.init(),
-      initialRoute: SignupScreen.id,
+      initialRoute: initialRoute,
       getPages: [
         GetPage(name: SignupScreen.id, page: () => SignupScreen()),
         GetPage(name: LoginScreen.id, page: () => const LoginScreen()),
@@ -34,6 +58,15 @@ class MyApp extends StatelessWidget {
           page: () => PaperUploadScreen(),
         ),
         GetPage(name: AttemptScreen.id, page: () => AttemptScreen()),
+        GetPage(
+            name: teachersignupscreen.id, page: () => teachersignupscreen()),
+        GetPage(
+            name: TeacherHomeScreen.id, page: () => const TeacherHomeScreen()),
+        GetPage(
+            name: UploadedPaperViewScreen.id,
+            page: () => UploadedPaperViewScreen()),
+        GetPage(
+            name: PaperEdittingScreen.id, page: () => PaperEdittingScreen()),
       ],
     );
   }

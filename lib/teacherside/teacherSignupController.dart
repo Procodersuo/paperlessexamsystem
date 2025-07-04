@@ -7,22 +7,12 @@ import 'package:fyppaperless/login_scrren.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-class SignupController extends GetxController {
+class Teachersignupcontroller extends GetxController {
   Future<void> signup(
       {required String name,
       required String email,
-      required String roll,
-      required String department,
-      required String semester,
-      required String section,
       required String password}) async {
-    if (email.isEmpty ||
-        password.isEmpty ||
-        roll.isEmpty ||
-        department.isEmpty ||
-        semester.isEmpty ||
-        section.isEmpty ||
-        password.isEmpty) {
+    if (email.isEmpty || password.isEmpty || password.isEmpty) {
       Get.snackbar("Error", "Please Fill All The Fields",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
@@ -40,18 +30,12 @@ class SignupController extends GetxController {
       await FirebaseFirestore.instance.collection("StudentsData").doc(uid).set({
         'Name': name,
         'Email': email,
-        'department': department,
-        'Section': section,
-        'Roll Number': roll,
-        'semester': semester
+        'role': "Teacher",
       });
       final box = GetStorage();
-      box.write("role", "stu");
+      box.write("role", "Teacher");
       EasyLoading.dismiss();
       Get.snackbar("Success", "Verification email sent to $email");
-      box.write("student_department", department);
-      box.write("student_semester", semester);
-      box.write("student_section", section);
       FirebaseAuth.instance.signOut();
       Get.to(const LoginScreen());
     } on FirebaseAuthException catch (e) {

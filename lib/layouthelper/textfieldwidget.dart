@@ -8,12 +8,14 @@ class MyTextField extends StatelessWidget {
   final Icon? sfxIcon;
   final bool isPassword;
   final int lines;
+  final String? initValue;
 
   const MyTextField(
       {super.key,
       required this.mycontroller,
       this.hinttext,
       this.sfxIcon,
+      this.initValue,
       this.isPassword = false,
       this.lines = 1});
 
@@ -25,6 +27,7 @@ class MyTextField extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: isPassword
           ? Obx(() => TextFormField(
+                initialValue: initValue,
                 controller: mycontroller,
                 obscureText: controller.isObsecure.value,
                 decoration: InputDecoration(
