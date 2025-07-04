@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class StudnetHomeScreen extends StatelessWidget {
   final String id = "/StudentHomeScreen";
   final AttemptController controller = Get.put(AttemptController());
+
+  StudnetHomeScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,8 +33,12 @@ class StudnetHomeScreen extends StatelessWidget {
                 return ListView.builder(
                   itemCount: papers.length,
                   itemBuilder: (context, index) {
-                    final paperData =
-                        papers[index].data() as Map<String, dynamic>;
+                    final paperDoc = papers[index];
+                    final rawData = paperDoc.data() as Map<String, dynamic>;
+                    final paperData = {
+                      ...rawData,
+                      'id': paperDoc.id,
+                    };
 
                     return Padding(
                       padding: const EdgeInsets.all(10),
@@ -102,11 +108,23 @@ class StudnetHomeScreen extends StatelessWidget {
                                       bgColor: Colors.green,
                                       foregrngColor: Colors.white,
                                       myText: "Attempt",
-                                      onTap: () {
-                                        controller.updateControllersFromPaper(
-                                            paperData);
-                                        Get.toNamed("/AttemptingScreen",
-                                            arguments: paperData);
+                                      onTap: () async {
+                                        final serverTime =
+                                            await controller.getServerTime();
+                                        final releaseTime =
+                                            (paperData['visibleAt']
+                                                    as Timestamp)
+                                                .toDate();
+
+                                        if (serverTime.isAfter(releaseTime)) {
+                                          controller.updateControllersFromPaper(
+                                              paperData);
+                                          Get.toNamed("/AttemptingScreen",
+                                              arguments: paperData);
+                                        } else {
+                                          Get.snackbar("Error",
+                                              "You Can Only Attemp Paper ON Release Time");
+                                        }
                                       },
                                     ),
                                     const SizedBox(width: 30),

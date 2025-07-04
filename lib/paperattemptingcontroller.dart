@@ -49,7 +49,6 @@ class AttemptController extends GetxController {
         .where("department", isEqualTo: "BSSE")
         .where("semester", isEqualTo: "8")
         .where("section", isEqualTo: "M")
-        .where("visibleAt", isLessThanOrEqualTo: now)
         .orderBy("visibleAt", descending: true)
         .snapshots();
   }
@@ -61,5 +60,29 @@ class AttemptController extends GetxController {
     for (int i = 0; i < questions.length; i++) {
       answerControllers.add(TextEditingController());
     }
+  }
+
+  Future<DateTime> getServerTime() async {
+    final docRef =
+        FirebaseFirestore.instance.collection('serverTime').doc('now');
+
+    // Set a server timestamp (will be overridden by server)
+    await docRef.set(
+        {'timestamp': FieldValue.serverTimestamp()}, SetOptions(merge: true));
+
+    // Read the document back to get actual server time
+    final snapshot = await docRef.get();
+    final timestamp = snapshot.data()?['timestamp'] as Timestamp;
+
+    return timestamp.toDate();
+  }
+
+  String currentUserId() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      debugPrint("⚠️ No user is currently logged in.");
+      return '';
+    }
+    return user.uid;
   }
 }

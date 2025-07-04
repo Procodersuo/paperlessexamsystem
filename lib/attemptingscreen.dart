@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fyppaperless/layouthelper/textfieldwidget.dart';
 import 'package:fyppaperless/paperattemptingcontroller.dart';
 import 'package:get/get.dart';
@@ -51,12 +53,39 @@ class AttemptScreen extends StatelessWidget {
             ),
 
             ElevatedButton(
-              onPressed: () {
-                for (int i = 0; i < controller.answerControllers.length; i++) {
-                  print(
-                      "Answer ${i + 1}: ${controller.answerControllers[i].text}");
+              onPressed: () async {
+                try {
+                  EasyLoading.show();
+                  final paperData = controller.paper.value!;
+                  final paperId = paperData['id'];
+                  print(paperId);
+                  final teacherId = paperData['teacherId'];
+                  print(teacherId);
+                  final studentId = controller.currentUserId();
+                  final answers =
+                      controller.answerControllers.map((e) => e.text).toList();
+
+                  await FirebaseFirestore.instance
+                      .collection("submissions")
+                      .doc(paperId)
+                      .collection("StudentsPaperssubmissions")
+                      .doc(studentId)
+                      .set({
+                    'answers': answers,
+                    'submittedAt': FieldValue.serverTimestamp(),
+                    'studentId': studentId,
+                    'teacherId': teacherId,
+                  });
+                  EasyLoading.dismiss();
+
+                  Get.snackbar("Submitted",
+                      "Your paper has been submitted successfully");
+                  Get.back();
+                } on FirebaseException catch (e) {
+                  EasyLoading.dismiss();
+                  Get.snackbar("Error", e.message.toString());
                 }
-                Get.snackbar("Success", "Answers collected (printing only)");
+                // or navigate to home screen
               },
               child: const Text("Submit Answers"),
             ),
