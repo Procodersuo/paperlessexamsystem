@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StudnetHomeScreen extends StatelessWidget {
   final String id = "/StudentHomeScreen";
+  // ✅ Get the existing controller
   final AttemptController controller = Get.put(AttemptController());
 
   StudnetHomeScreen({super.key});

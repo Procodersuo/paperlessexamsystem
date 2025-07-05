@@ -8,48 +8,21 @@ class AttemptController extends GetxController {
   final RxBool isLoading = true.obs;
   final Rxn<Map<String, dynamic>> paper = Rxn<Map<String, dynamic>>();
   final List<TextEditingController> answerControllers = [];
-
   late Stream<QuerySnapshot> paperStream;
-
-  @override
-  void onInit() {
-    super.onInit();
-    loadUserData();
-    setupPaperStream();
-  }
-
-  Future<void> loadUserData() async {
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid == null) return;
-
-    final doc = await FirebaseFirestore.instance
-        .collection("Studentsdata")
-        .doc(uid)
-        .get();
-    if (doc.exists) {
-      final data = doc.data()!;
-      final box = GetStorage();
-      box.write("student_department", data["department"]);
-      box.write("student_semester", data["semester"]);
-      box.write("student_section", data["section"]);
-    }
-  }
 
   void setupPaperStream() {
     final box = GetStorage();
     final String department = box.read("student_department") ?? "";
     final String semester = box.read("student_semester") ?? "";
     final String section = box.read("student_section") ?? "";
-
-    final now = Timestamp.now();
-    print("🕓 Current Device Time: ${DateTime.now()}");
-
+    print(department);
+    print(semester);
+    print(section);
     paperStream = FirebaseFirestore.instance
         .collection("papers")
-        .where("department", isEqualTo: "BSSE")
-        .where("semester", isEqualTo: "8")
-        .where("section", isEqualTo: "M")
-        .orderBy("visibleAt", descending: true)
+        .where("department", isEqualTo: department)
+        .where("semester", isEqualTo: semester)
+        .where("section", isEqualTo: section)
         .snapshots();
   }
 
@@ -66,7 +39,6 @@ class AttemptController extends GetxController {
     final docRef =
         FirebaseFirestore.instance.collection('serverTime').doc('now');
 
-    // Set a server timestamp (will be overridden by server)
     await docRef.set(
         {'timestamp': FieldValue.serverTimestamp()}, SetOptions(merge: true));
 

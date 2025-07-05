@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fyppaperless/paperattemptingcontroller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -28,6 +29,17 @@ class Logincontroller extends GetxController {
           .doc(user.uid)
           .get();
 
+      final data = await FirebaseFirestore.instance
+          .collection("StudentsData")
+          .doc(user.uid)
+          .get();
+      final box = GetStorage();
+      box.write("student_department", data["department"]);
+      box.write("student_semester", data["semester"]);
+      box.write("student_section", data["Section"]);
+      box.write("student_name", data["Name"]);
+      box.write("student_rollnumber", data["Roll Number"]);
+
       if (!userDoc.exists || userDoc.data()?['role'] == null) {
         EasyLoading.dismiss();
         Get.snackbar("Error", "User role not found. Contact admin.");
@@ -35,7 +47,6 @@ class Logincontroller extends GetxController {
       }
 
       final role = userDoc['role'];
-      final box = GetStorage();
       box.write("role", role);
 
       EasyLoading.dismiss();
@@ -43,6 +54,9 @@ class Logincontroller extends GetxController {
       if (role == "teacher") {
         Get.offNamed('/TeacherHomeScreen');
       } else if (role == "stu") {
+        final controller = Get.put(AttemptController()); // initialize here
+        controller
+            .setupPaperStream(); // 🔥 call it manually AFTER writing to GetStorage
         Get.offNamed('/StudentHomeScreen');
       } else {
         Get.snackbar("Error", "Unknown role assigned.");

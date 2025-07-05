@@ -13,6 +13,8 @@ class UploadedPaperViewScreen extends StatelessWidget {
   UploadedPaperViewScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    final bool editscreenorstusubmission = Get.arguments as bool;
+
     return Scaffold(
       appBar: AppBar(title: const Text("Available Papers")),
       body: Column(
@@ -103,12 +105,20 @@ class UploadedPaperViewScreen extends StatelessWidget {
                                     MyButton(
                                       bgColor: Colors.green,
                                       foregrngColor: Colors.white,
-                                      myText: "Edit Paper",
+                                      myText: editscreenorstusubmission == true
+                                          ? "View Submission"
+                                          : "Edit Paper",
                                       onTap: () async {
                                         controller.updateControllersFromPaper(
                                             paperData);
-                                        Get.toNamed("/PaperEdittingScreen",
-                                            arguments: paperData);
+
+                                        editscreenorstusubmission == true
+                                            ? Get.toNamed(
+                                                "/StudentSubmissionList",
+                                                arguments: paperData['id'])
+                                            : Get.toNamed(
+                                                "/PaperEdittingScreen",
+                                                arguments: paperData);
                                       },
                                     ),
                                     const SizedBox(width: 30),

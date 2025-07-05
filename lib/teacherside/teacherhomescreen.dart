@@ -43,12 +43,14 @@ class TeacherHomeScreen extends StatelessWidget {
                 _DashboardButton(
                   title: "My Papers",
                   icon: Icons.folder,
-                  onTap: () => Get.toNamed("/UploadedPaperViewScreen"),
+                  onTap: () =>
+                      Get.toNamed("/UploadedPaperViewScreen", arguments: false),
                 ),
                 _DashboardButton(
                   title: "Submissions",
                   icon: Icons.assignment_turned_in,
-                  onTap: () => Get.toNamed("/SubmissionsScreen"),
+                  onTap: () =>
+                      Get.toNamed("/UploadedPaperViewScreen", arguments: true),
                 ),
                 _DashboardButton(
                   title: "Grading",

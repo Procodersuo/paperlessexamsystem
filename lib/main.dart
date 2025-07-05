@@ -6,12 +6,15 @@ import 'package:fyppaperless/attemptingscreen.dart';
 import 'package:fyppaperless/firebase_options.dart';
 import 'package:fyppaperless/home_screen.dart';
 import 'package:fyppaperless/login_scrren.dart';
+import 'package:fyppaperless/paperattemptingcontroller.dart';
 import 'package:fyppaperless/signup_screen.dart';
 import 'package:fyppaperless/teacherside/paperEdittingScreen.dart';
+import 'package:fyppaperless/teacherside/stusubmissionlist.dart';
 import 'package:fyppaperless/teacherside/teacherhomescreen.dart';
 import 'package:fyppaperless/teacherside/teachersignupscreen.dart';
-import 'package:fyppaperless/teacherside/paperviewscreen.dart';
+import 'package:fyppaperless/teacherside/myuploadedpaper.dart';
 import 'package:fyppaperless/teacherside/uploadpaper.dart';
+import 'package:fyppaperless/teacherside/vieweachstupaper.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -39,6 +42,8 @@ class MyApp extends StatelessWidget {
       if (role == "teacher") {
         initialRoute = '/TeacherHomeScreen';
       } else if (role == "stu") {
+        final controller = Get.put(AttemptController(), permanent: true);
+        controller.setupPaperStream();
         initialRoute = '/StudentHomeScreen';
       } else {
         initialRoute = '/LoginScreen'; // fallback
@@ -67,7 +72,14 @@ class MyApp extends StatelessWidget {
             page: () => UploadedPaperViewScreen()),
         GetPage(
             name: PaperEdittingScreen.id, page: () => PaperEdittingScreen()),
+        GetPage(
+            name: StudentSubmissionListScreen.id,
+            page: () => const StudentSubmissionListScreen()),
+        GetPage(
+            name: ViewStudentSubmissionScreen.id,
+            page: () => const ViewStudentSubmissionScreen())
       ],
     );
   }
 }
+

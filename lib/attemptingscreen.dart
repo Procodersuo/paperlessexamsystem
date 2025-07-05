@@ -4,10 +4,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fyppaperless/layouthelper/textfieldwidget.dart';
 import 'package:fyppaperless/paperattemptingcontroller.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AttemptScreen extends StatelessWidget {
   static const id = "/AttemptingScreen";
-  final AttemptController controller = Get.put(AttemptController());
+  final AttemptController controller = Get.find();
 
   AttemptScreen({super.key});
 
@@ -19,6 +20,12 @@ class AttemptScreen extends StatelessWidget {
     controller.updateControllersFromPaper(paperData);
 
     final List questions = paperData["questions"];
+    final box = GetStorage();
+    final String department = box.read("student_department") ?? "";
+    final String semester = box.read("student_semester") ?? "";
+    final String section = box.read("student_section") ?? "";
+    final String name = box.read("student_name") ?? "";
+    final String rollcall = box.read("student_rollnumber") ?? "";
 
     return Scaffold(
       appBar: AppBar(title: const Text("Attempt Paper")),
@@ -61,8 +68,17 @@ class AttemptScreen extends StatelessWidget {
                   final teacherId = paperData['teacherId'];
 
                   final studentId = controller.currentUserId();
+
                   final answers =
                       controller.answerControllers.map((e) => e.text).toList();
+
+                  final combinedQuestionsAnswers =
+                      List.generate(questions.length, (index) {
+                    return {
+                      "question": questions[index]["question"],
+                      "answer": answers[index],
+                    };
+                  });
 
                   await FirebaseFirestore.instance
                       .collection("submissions")
@@ -70,10 +86,15 @@ class AttemptScreen extends StatelessWidget {
                       .collection("StudentsPaperssubmissions")
                       .doc(studentId)
                       .set({
-                    'answers': answers,
+                    'response': combinedQuestionsAnswers,
                     'submittedAt': FieldValue.serverTimestamp(),
                     'studentId': studentId,
                     'teacherId': teacherId,
+                    'department': department,
+                    'semester': semester,
+                    'section': section,
+                    'name': name,
+                    'rollcall': rollcall
                   });
                   EasyLoading.dismiss();
 
