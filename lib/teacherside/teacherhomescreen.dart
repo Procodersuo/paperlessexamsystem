@@ -52,34 +52,12 @@ class TeacherHomeScreen extends StatelessWidget {
                   onTap: () =>
                       Get.toNamed("/UploadedPaperViewScreen", arguments: true),
                 ),
-                _DashboardButton(
-                  title: "Grading",
-                  icon: Icons.grade,
-                  onTap: () => Get.toNamed("/GradingScreen"),
-                ),
+
               ],
             ),
             const SizedBox(height: 20),
 
-            const Text("Upcoming Papers", style: TextStyle(fontSize: 18)),
-            const SizedBox(height: 10),
 
-            /// List of upcoming papers
-            ListView(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              children: const [
-                Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12))),
-                  child: ListTile(
-                    title: Text("AI Midterm - BSSE 7M"),
-                    subtitle: Text("Releases: July 4, 9:00 AM"),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),

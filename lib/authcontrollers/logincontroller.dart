@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:fyppaperless/paperattemptingcontroller.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
+
+import '../paperattemptingcontroller.dart';
 
 class Logincontroller extends GetxController {
   Future<void> login({required String email, required String password}) async {
@@ -23,22 +25,11 @@ class Logincontroller extends GetxController {
         return;
       }
 
-      /// 🔥 Always fetch role from Firestore (not just for new users)
+      /// 🔥 Always fetch role from Firestore
       final userDoc = await FirebaseFirestore.instance
           .collection("StudentsData")
           .doc(user.uid)
           .get();
-
-      final data = await FirebaseFirestore.instance
-          .collection("StudentsData")
-          .doc(user.uid)
-          .get();
-      final box = GetStorage();
-      box.write("student_department", data["department"]);
-      box.write("student_semester", data["semester"]);
-      box.write("student_section", data["Section"]);
-      box.write("student_name", data["Name"]);
-      box.write("student_rollnumber", data["Roll Number"]);
 
       if (!userDoc.exists || userDoc.data()?['role'] == null) {
         EasyLoading.dismiss();
@@ -47,18 +38,34 @@ class Logincontroller extends GetxController {
       }
 
       final role = userDoc['role'];
+      final box = GetStorage();
       box.write("role", role);
 
-      EasyLoading.dismiss();
+      /// ✅ If user is a student, fetch and store student-related fields
+      if (role == "stu") {
+        final data = userDoc.data()!;
+        box.write("student_department", data["department"]);
+        box.write("student_semester", data["semester"]);
+        box.write("student_section", data["Section"]);
+        box.write("student_name", data["Name"]);
+        box.write("student_rollnumber", data["Roll Number"]);
 
-      if (role == "teacher") {
-        Get.offNamed('/TeacherHomeScreen');
-      } else if (role == "stu") {
-        final controller = Get.put(AttemptController()); // initialize here
-        controller
-            .setupPaperStream(); // 🔥 call it manually AFTER writing to GetStorage
+        final controller = Get.put(AttemptController());
+        controller.setupPaperStream(); // manually call after writing GetStorage
+
+        EasyLoading.dismiss();
         Get.offNamed('/StudentHomeScreen');
-      } else {
+      }
+
+      /// ✅ If user is a teacher, just redirect
+      else if (role == "teacher") {
+        EasyLoading.dismiss();
+        Get.offNamed('/TeacherHomeScreen');
+      }
+
+      /// ❌ Unknown role
+      else {
+        EasyLoading.dismiss();
         Get.snackbar("Error", "Unknown role assigned.");
       }
     } on FirebaseAuthException catch (e) {
