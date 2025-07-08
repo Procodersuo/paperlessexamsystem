@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Datetimepicker extends GetxController {
-  final Rx<DateTime?> visibleAt = Rx<DateTime?>(null);
+class Endtimepicker extends GetxController {
+  final Rx<DateTime?> endingTimw = Rx<DateTime?>(null);
   Future<void> pickVisibleTime() async {
     final ctx = Get.context!;
     final pickedDate = await showDatePicker(
@@ -21,7 +21,7 @@ class Datetimepicker extends GetxController {
 
     if (pickedTime == null) return;
 
-    visibleAt.value = DateTime(
+    endingTimw.value = DateTime(
       pickedDate.year,
       pickedDate.month,
       pickedDate.day,

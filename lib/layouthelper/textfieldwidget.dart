@@ -9,13 +9,17 @@ class MyTextField extends StatelessWidget {
   final bool isPassword;
   final int lines;
   final String? initValue;
+  final VoidCallback? voiceAnswer;
+  final bool enableVoice;
 
   const MyTextField(
       {super.key,
+      this.enableVoice = false,
       required this.mycontroller,
       this.hinttext,
       this.sfxIcon,
       this.initValue,
+      this.voiceAnswer,
       this.isPassword = false,
       this.lines = 1});
 
@@ -24,7 +28,7 @@ class MyTextField extends StatelessWidget {
     final Passwordcontroller controller = Get.put(Passwordcontroller());
 
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: isPassword
           ? Obx(() => TextFormField(
                 initialValue: initValue,
@@ -56,7 +60,12 @@ class MyTextField extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: hinttext,
                 contentPadding: const EdgeInsets.all(8),
-                suffixIcon: sfxIcon,
+                suffixIcon: enableVoice && voiceAnswer != null
+                    ? IconButton(
+                        icon: const Icon(Icons.mic),
+                        onPressed: voiceAnswer,
+                      )
+                    : null,
                 focusedBorder: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),

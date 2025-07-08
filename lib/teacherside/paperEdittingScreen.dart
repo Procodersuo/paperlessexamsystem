@@ -21,7 +21,9 @@ class PaperEdittingScreen extends StatelessWidget {
     final List questions = paperData["questions"];
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Attempt Paper")),
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: const Text("Attempt Paper",)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

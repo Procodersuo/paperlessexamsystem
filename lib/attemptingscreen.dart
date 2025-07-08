@@ -9,17 +9,15 @@ import 'package:get_storage/get_storage.dart';
 class AttemptScreen extends StatelessWidget {
   static const id = "/AttemptingScreen";
   final AttemptController controller = Get.find();
-
   AttemptScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     final paperData = Get.arguments as Map<String, dynamic>;
-
     controller.paper.value = paperData;
     controller.updateControllersFromPaper(paperData);
-
     final List questions = paperData["questions"];
+    DateTime endTime = (paperData['endTime'] as Timestamp).toDate();
+    controller.startCountdown(endTime);
     final box = GetStorage();
     final String department = box.read("student_department") ?? "";
     final String semester = box.read("student_semester") ?? "";
@@ -28,13 +26,25 @@ class AttemptScreen extends StatelessWidget {
     final String rollcall = box.read("student_rollnumber") ?? "";
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Attempt Paper")),
+      appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: Colors.green,
+          title: const Text(
+            "Attempt Paper",
+            style: TextStyle(color: Colors.white),
+          )),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             Text("Subject: ${paperData["title"]}",
                 style: Theme.of(context).textTheme.titleLarge),
+            const Text("Paper will automatically submit after"),
+            Obx(() => Text(
+              "⏳ Time left: ${_formatDuration(controller.timeLeft.value)}",
+              style: TextStyle(fontSize: 16, color: Colors.red),
+            )),
+
             const SizedBox(height: 20),
 
             /// Questions
@@ -51,6 +61,11 @@ class AttemptScreen extends StatelessWidget {
                         mycontroller: controller.answerControllers[index],
                         hinttext: "Write Your Answer Here ",
                         lines: 5,
+                        enableVoice: true, // only show mic for answer fields
+                        voiceAnswer: () {
+                          controller.toggleListening(
+                              controller.answerControllers[index]);
+                        },
                       ),
                       const SizedBox(height: 20),
                     ],
@@ -58,10 +73,9 @@ class AttemptScreen extends StatelessWidget {
                 },
               ),
             ),
-
             ElevatedButton(
               onPressed: () async {
-                try {
+                  try {
                   EasyLoading.show();
                   final paperData = controller.paper.value!;
                   final paperId = paperData['id'];
@@ -70,16 +84,16 @@ class AttemptScreen extends StatelessWidget {
                   final studentId = controller.currentUserId();
 
                   final answers =
-                      controller.answerControllers.map((e) => e.text).toList();
+                  controller.answerControllers.map((e) => e.text).toList();
 
                   final combinedQuestionsAnswers =
-                      List.generate(questions.length, (index) {
+                  List.generate(questions.length, (index) {
                     return {
                       "question": questions[index]["question"],
                       "answer": answers[index],
                     };
                   });
-
+// controller.submitPaper(name,rollcall,paperData['title'],department,semester,section,paperId, studentId, combinedQuestionsAnswers )
                   await FirebaseFirestore.instance
                       .collection("submissions")
                       .doc(paperId)
@@ -94,7 +108,8 @@ class AttemptScreen extends StatelessWidget {
                     'semester': semester,
                     'section': section,
                     'name': name,
-                    'rollcall': rollcall
+                    'rollcall': rollcall,
+                    'Papertitle': paperData["title"]
                   });
                   EasyLoading.dismiss();
 
@@ -105,8 +120,9 @@ class AttemptScreen extends StatelessWidget {
                   EasyLoading.dismiss();
                   Get.snackbar("Error", e.message.toString());
                 }
-                // or navigate to home screen
-              },
+                },
+
+
               child: const Text("Submit Answers"),
             ),
           ],
@@ -114,4 +130,10 @@ class AttemptScreen extends StatelessWidget {
       ),
     );
   }
+  String _formatDuration(Duration d) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    return "${twoDigits(d.inHours)}:${twoDigits(d.inMinutes.remainder(60))}:${twoDigits(d.inSeconds.remainder(60))}";
+  }
+
+
 }

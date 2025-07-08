@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyppaperless/layouthelper/button.dart';
 import 'package:fyppaperless/layouthelper/textforcard.dart';
-import 'package:fyppaperless/paperattemptingcontroller.dart';
 import 'package:fyppaperless/teacherside/tpapereditcontroler.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,7 +15,13 @@ class UploadedPaperViewScreen extends StatelessWidget {
     final bool editscreenorstusubmission = Get.arguments as bool;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Available Papers")),
+      appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: Colors.green,
+          title: const Text(
+            "Available Papers",
+            style: TextStyle(color: Colors.white),
+          )),
       body: Column(
         children: [
           Expanded(
@@ -126,9 +131,15 @@ class UploadedPaperViewScreen extends StatelessWidget {
                                       bgColor: Colors.red,
                                       foregrngColor: Colors.white,
                                       myText: "Delete",
-                                      onTap: () {
-                                        Get.snackbar("Cancelled",
-                                            "Delete Logic Will be Applied");
+                                      onTap: () async {
+                                        var paperId = paperData['id'];
+                                        await FirebaseFirestore.instance
+                                            .collection("papers")
+                                            .doc(paperId)
+                                            .delete();
+
+                                        Get.snackbar(
+                                            "Deleted", "Paper Deleted");
                                       },
                                     ),
                                   ],

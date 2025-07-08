@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fyppaperless/layouthelper/button.dart';
 import 'package:fyppaperless/layouthelper/textfieldwidget.dart';
 import 'package:fyppaperless/teacherside/datetimepicker.dart';
+import 'package:fyppaperless/teacherside/endtimepicker.dart';
 import 'package:fyppaperless/teacherside/paperuploadcontroller.dart';
 import 'package:get/get.dart';
 import '../layouthelper/dropdown.dart';
@@ -20,6 +21,7 @@ class PaperUploadScreen extends StatelessWidget {
 
   final UploadController controller = Get.put(UploadController());
   final Datetimepicker controllerDateTime = Get.put(Datetimepicker());
+  final Endtimepicker controllerEndTime = Get.put(Endtimepicker());
   void addQuestion() {
     qaList.add({
       'question': TextEditingController(),
@@ -42,7 +44,12 @@ class PaperUploadScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Upload Paper")),
+      appBar: AppBar(
+          backgroundColor: Colors.green,
+          title: const Text(
+            "Upload Paper",
+            style: TextStyle(color: Colors.white),
+          )),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: SingleChildScrollView(
@@ -53,8 +60,13 @@ class PaperUploadScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Obx(() => MySimpleDropdown(
-                          items: const ["BSSE", "BSIT", "BSCS", "BSDS"],
-                          hintTxt: "Department",
+                          items: const [
+                            "BSSE",
+                            "BSIT",
+                            "BSCS",
+                            "BSDS",
+                          ],
+                          hintTxt: "Depart",
                           selectedValue: department.value,
                           onChanged: (val) => department.value = val,
                         )),
@@ -153,7 +165,17 @@ class PaperUploadScreen extends StatelessWidget {
                           : "Releases: ${controllerDateTime.visibleAt.value!.toLocal()}",
                     )),
               ),
-
+              ElevatedButton(
+                onPressed: () {
+                  controllerEndTime
+                      .pickVisibleTime(); // ✅ logic handled in controller
+                },
+                child: Obx(() => Text(
+                      controllerEndTime.endingTimw.value == null
+                          ? "Pick Paper Ending Time"
+                          : "Releases: ${controllerEndTime.endingTimw.value!.toLocal()}",
+                    )),
+              ),
               const SizedBox(height: 10),
 
               MyButton(
@@ -168,6 +190,7 @@ class PaperUploadScreen extends StatelessWidget {
                       paperTitle: paperTitleController.text.trim(),
                       qaList: qaList,
                       visibleAt: controllerDateTime.visibleAt.value,
+                      endTime: controllerEndTime.endingTimw.value,
                     );
                   })
             ],

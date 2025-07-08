@@ -14,7 +14,9 @@ class StudentSubmissionListScreen extends StatelessWidget {
     final paperId = Get.arguments as String;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Submitted Students")),
+      appBar: AppBar(
+          backgroundColor: Colors.green,
+          title: const Text("Submitted Students")),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("submissions")

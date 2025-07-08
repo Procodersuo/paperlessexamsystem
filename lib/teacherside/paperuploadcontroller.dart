@@ -12,9 +12,15 @@ class UploadController extends GetxController {
     required String paperTitle,
     required List<Map<String, TextEditingController>> qaList,
     required DateTime? visibleAt,
+    required DateTime? endTime,
   }) async {
     if (visibleAt == null) {
       Get.snackbar("Error", "Please select a release time");
+      return;
+    }
+
+    if (endTime == null) {
+      Get.snackbar("Error", "Please select a Ending Time time");
       return;
     }
     // Extract only non-empty questions/answers
@@ -49,6 +55,7 @@ class UploadController extends GetxController {
         'questions': questions,
         'createdAt': FieldValue.serverTimestamp(),
         'visibleAt': Timestamp.fromDate(visibleAt.toUtc()),
+        'endTime': Timestamp.fromDate(endTime.toUtc()),
       });
 
       Get.snackbar("Success", "Paper uploaded successfully ✅");

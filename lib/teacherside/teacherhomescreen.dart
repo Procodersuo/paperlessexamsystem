@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,11 +10,19 @@ class TeacherHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Teacher Dashboard"),
+        backgroundColor: Colors.green,
+        title: const Text(
+          "Teacher Dashboard",
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(
+              Icons.logout,
+              color: Colors.white,
+            ),
             onPressed: () {
+              FirebaseAuth.instance.signOut();
               Get.offAllNamed('/LoginScreen');
             },
           )
@@ -24,7 +33,7 @@ class TeacherHomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Welcome, Teacher 👋", style: TextStyle(fontSize: 20)),
+            const Text("Welcome,", style: TextStyle(fontSize: 20)),
             const SizedBox(height: 20),
 
             /// QUICK ACTION BUTTONS
@@ -52,12 +61,9 @@ class TeacherHomeScreen extends StatelessWidget {
                   onTap: () =>
                       Get.toNamed("/UploadedPaperViewScreen", arguments: true),
                 ),
-
               ],
             ),
             const SizedBox(height: 20),
-
-
           ],
         ),
       ),
@@ -85,18 +91,18 @@ class _DashboardButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         elevation: 4,
-        color: Colors.indigo,
+        color: Colors.amber.shade100,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 36, color: Colors.white),
+              Icon(icon, size: 36, color: Colors.green),
               const SizedBox(height: 12),
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.green),
               ),
             ],
           ),

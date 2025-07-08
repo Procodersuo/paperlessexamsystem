@@ -5,9 +5,7 @@ import 'package:get/get.dart';
 
 class ViewStudentSubmissionScreen extends StatefulWidget {
   static const id = "/ViewStudentSubmission";
-
   const ViewStudentSubmissionScreen({super.key});
-
   @override
   State<ViewStudentSubmissionScreen> createState() =>
       _ViewStudentSubmissionScreenState();
@@ -16,7 +14,6 @@ class ViewStudentSubmissionScreen extends StatefulWidget {
 class _ViewStudentSubmissionScreenState
     extends State<ViewStudentSubmissionScreen> {
   final TextEditingController marksController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final args = Get.arguments as Map<String, dynamic>;
@@ -36,14 +33,11 @@ class _ViewStudentSubmissionScreenState
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-
           if (!snapshot.hasData || !snapshot.data!.exists) {
             return const Center(child: Text("Submission not found"));
           }
-
           final data = snapshot.data!.data() as Map<String, dynamic>;
           final List answers = data['response'] ?? [];
-
           return Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
@@ -84,12 +78,12 @@ class _ViewStudentSubmissionScreenState
                     try {
                       EasyLoading.show();
                       await FirebaseFirestore.instance
-                          .collection("submissions")
-                          .doc(paperId)
-                          .collection("studentSubmissions")
-                          .doc(studentId)
-                          .update({
-                        'marks': int.tryParse(marksController.text) ?? 0,
+                          .collection("Results").add({
+                        'stuID' : studentId,
+                        'StuName': data['name'],
+                        'Marks': marksController.text.toString(),
+                        'Paper Title': data['Papertitle'],
+                        'submittedAt' : Timestamp.now(),
                       });
                       EasyLoading.dismiss();
                       Get.snackbar("Saved", "Marks saved successfully");
