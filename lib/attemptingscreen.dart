@@ -31,7 +31,8 @@ class AttemptScreen extends StatelessWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!controller.countdownStarted) {
         controller.countdownStarted = true;
-        controller.startCountdownUsingServerTime(endTime);
+        controller
+            .startCountdownUsingServerTime(endTime); // ✅ runs now → endTime
       }
     });
 

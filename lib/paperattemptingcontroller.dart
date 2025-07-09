@@ -52,27 +52,32 @@ class AttemptController extends GetxController {
   }
 
   Future<void> startCountdownUsingServerTime(DateTime endTime) async {
-    final now = await getServerTime();
-    final remaining = endTime.difference(now);
-    print(now);
-    print(endTime);
-    if (remaining.isNegative) {
-      timeLeft.value = Duration.zero;
-      return;
-    }
+    try {
+      final now = await getServerTime(); // ✅ Get current server time
 
-    // Set countdown to remaining time between now and endTime
-    timeLeft.value = remaining;
+      final remaining = endTime.difference(now); // ✅ countdown = endTime - now
 
-    countdownTimer?.cancel();
-    countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (timeLeft.value.inSeconds <= 1) {
+      // If paper already expired
+      if (remaining.isNegative || remaining.inSeconds == 0) {
         timeLeft.value = Duration.zero;
-        timer.cancel();
-      } else {
-        timeLeft.value -= const Duration(seconds: 1);
+        return;
       }
-    });
+
+      timeLeft.value = remaining; // ✅ countdown from now till endTime
+
+      countdownTimer?.cancel(); // Cancel any old timer
+
+      countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (timeLeft.value.inSeconds <= 1) {
+          timeLeft.value = Duration.zero;
+          timer.cancel();
+        } else {
+          timeLeft.value -= const Duration(seconds: 1);
+        }
+      });
+    } catch (e) {
+      Get.snackbar("Error", "Failed to start timer: $e");
+    }
   }
 
   /// 🎤 Toggle voice input
