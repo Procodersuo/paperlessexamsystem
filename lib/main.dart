@@ -3,13 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fyppaperless/attemptingscreen.dart';
-import 'package:fyppaperless/editprofile.dart';
 import 'package:fyppaperless/firebase_options.dart';
 import 'package:fyppaperless/forgetpassword.dart';
 import 'package:fyppaperless/home_screen.dart';
 import 'package:fyppaperless/login_scrren.dart';
 import 'package:fyppaperless/paperattemptingcontroller.dart';
-import 'package:fyppaperless/resultscree.dart';
 import 'package:fyppaperless/signup_screen.dart';
 import 'package:fyppaperless/teacherside/paperEdittingScreen.dart';
 import 'package:fyppaperless/teacherside/stusubmissionlist.dart';
@@ -33,7 +31,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   final box = GetStorage();
   MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -79,9 +76,7 @@ class MyApp extends StatelessWidget {
         GetPage(
             name: ViewStudentSubmissionScreen.id,
             page: () => const ViewStudentSubmissionScreen()),
-        GetPage(name: Forgetpassword.id, page: () => const Forgetpassword()),
-        GetPage(name: Resultscreen.id, page: ()=> const Resultscreen()),
-        GetPage(name: editProfile.id, page: ()=> const editProfile()),
+        GetPage(name: Forgetpassword.id, page: () => const Forgetpassword())
       ],
     );
   }
