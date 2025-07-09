@@ -161,6 +161,7 @@ class AttemptScreen extends StatelessWidget {
 
       EasyLoading.dismiss();
       Get.snackbar("Submitted", "Your paper has been submitted successfully");
+      controller.setupPaperStream();
       Get.offAllNamed("/StudentHomeScreen");
     } catch (e) {
       EasyLoading.dismiss();

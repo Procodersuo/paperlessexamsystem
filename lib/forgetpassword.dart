@@ -22,7 +22,7 @@ class Forgetpassword extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Lottie.asset("assests/forgetpassword.json"),
+              Lottie.asset("assests/forgetpassword.json", height: 350),
               const SizedBox(
                 height: 10,
               ),

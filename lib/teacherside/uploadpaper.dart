@@ -45,6 +45,7 @@ class PaperUploadScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: Colors.green,
           title: const Text(
             "Upload Paper",
@@ -165,6 +166,9 @@ class PaperUploadScreen extends StatelessWidget {
                           : "Releases: ${controllerDateTime.visibleAt.value!.toLocal()}",
                     )),
               ),
+              const SizedBox(
+                height: 20,
+              ),
               ElevatedButton(
                 onPressed: () {
                   controllerEndTime
@@ -176,7 +180,7 @@ class PaperUploadScreen extends StatelessWidget {
                           : "Releases: ${controllerEndTime.endingTimw.value!.toLocal()}",
                     )),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
 
               MyButton(
                   bgColor: Colors.blue,

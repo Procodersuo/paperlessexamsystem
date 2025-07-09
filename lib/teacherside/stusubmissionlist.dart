@@ -15,14 +15,18 @@ class StudentSubmissionListScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: Colors.green,
-          title: const Text("Submitted Students")),
+          title: const Text(
+            "Submitted Students",
+            style: TextStyle(color: Colors.white),
+          )),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("submissions")
             .doc(paperId)
-            .collection("StudentsPaperssubmissions").snapshots(),
-
+            .collection("StudentsPaperssubmissions")
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -42,72 +46,75 @@ class StudentSubmissionListScreen extends StatelessWidget {
               final studentId = doc.id;
 
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10 , vertical:
-                5) ,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Card(
                     elevation: 5,
                     color: Colors.amber.shade100,
                     child: SizedBox(
-                  height: 200,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      height: 200,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const MyTextWidget(myText: "Student Name:"),
-                            MyTextWidget(myText: data['name'] ?? 'N/A'),
-                          ],
-                        ),
-                        const SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const MyTextWidget(myText: "Roll No:"),
-                            MyTextWidget(myText: data['rollcall'] ?? 'N/A'),
-                          ],
-                        ),
-                        const SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const MyTextWidget(myText: "Department:"),
-                            MyTextWidget(myText: data['department'] ?? 'N/A'),
-                          ],
-                        ),
-                        const SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const MyTextWidget(myText: "Semester & Section:"),
-                            MyTextWidget(
-                              myText:
-                              "${data['semester'] ?? 'N/A'} - ${data['section'] ?? 'N/A'}",
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const MyTextWidget(myText: "Student Name:"),
+                                MyTextWidget(myText: data['name'] ?? 'N/A'),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const MyTextWidget(myText: "Roll No:"),
+                                MyTextWidget(myText: data['rollcall'] ?? 'N/A'),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const MyTextWidget(myText: "Department:"),
+                                MyTextWidget(
+                                    myText: data['department'] ?? 'N/A'),
+                              ],
+                            ),
+                            const SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const MyTextWidget(
+                                    myText: "Semester & Section:"),
+                                MyTextWidget(
+                                  myText:
+                                      "${data['semester'] ?? 'N/A'} - ${data['section'] ?? 'N/A'}",
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            Center(
+                              child: MyButton(
+                                bgColor: Colors.green,
+                                foregrngColor: Colors.white,
+                                myText: "View Paper",
+                                onTap: () {
+                                  Get.toNamed('/ViewStudentSubmission',
+                                      arguments: {
+                                        "paperId": paperId,
+                                        "studentId": studentId,
+                                      });
+                                },
+                              ),
                             ),
                           ],
                         ),
-                        const Spacer(),
-                        Center(
-                          child: MyButton(
-                            bgColor: Colors.green,
-                            foregrngColor: Colors.white,
-                            myText: "View Paper",
-                            onTap: () {
-                              Get.toNamed('/ViewStudentSubmission', arguments: {
-                                "paperId": paperId,
-                                "studentId": studentId,
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+                      ),
+                    )
 
-                // child: ListTile(
+                    // child: ListTile(
                     //   title: Text("Student ID: $studentId"),
                     //   subtitle: Text("Submitted at: ${data['submittedAt'].toDate()}"),
 

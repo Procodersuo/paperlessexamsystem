@@ -21,7 +21,13 @@ class _ViewStudentSubmissionScreenState
     final studentId = args['studentId'];
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Student's Submission")),
+      appBar: AppBar(
+          backgroundColor: Colors.green,
+          iconTheme: const IconThemeData(color: Colors.white),
+          title: const Text(
+            "Student's Submission",
+            style: TextStyle(color: Colors.white),
+          )),
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance
             .collection("submissions")
@@ -78,12 +84,13 @@ class _ViewStudentSubmissionScreenState
                     try {
                       EasyLoading.show();
                       await FirebaseFirestore.instance
-                          .collection("Results").add({
-                        'stuID' : studentId,
+                          .collection("Results")
+                          .add({
+                        'stuID': studentId,
                         'StuName': data['name'],
                         'Marks': marksController.text.toString(),
                         'Paper Title': data['Papertitle'],
-                        'submittedAt' : Timestamp.now(),
+                        'submittedAt': Timestamp.now(),
                       });
                       EasyLoading.dismiss();
                       Get.snackbar("Saved", "Marks saved successfully");

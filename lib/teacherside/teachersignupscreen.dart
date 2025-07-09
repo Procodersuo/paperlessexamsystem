@@ -28,7 +28,7 @@ class teachersignupscreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Lottie.asset("assests/teacher.json"),
+              Lottie.asset("assests/teacher.json", height: 350),
               MyTextField(
                 mycontroller: securityKeyController,
                 hinttext: "Enter Your Secret Code",

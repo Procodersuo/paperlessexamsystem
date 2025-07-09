@@ -56,7 +56,7 @@ class Logincontroller extends GetxController {
       }
 
       /// ✅ If user is a teacher, just redirect
-      else if (role == "teacher") {
+      else if (role == "Teacher") {
         EasyLoading.dismiss();
         Get.offNamed('/TeacherHomeScreen');
       }

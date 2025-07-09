@@ -22,8 +22,12 @@ class PaperEdittingScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: const Text("Attempt Paper",)),
+          iconTheme: const IconThemeData(color: Colors.white),
+          backgroundColor: Colors.green,
+          title: const Text(
+            "Edit Paper",
+            style: TextStyle(color: Colors.white),
+          )),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -78,12 +82,11 @@ class PaperEdittingScreen extends StatelessWidget {
                     'questions': updatedQuestionsAnswers,
                     'submittedAt': FieldValue.serverTimestamp(),
                   });
-
                   EasyLoading.dismiss();
 
                   Get.snackbar(
                       "Submitted", "Your paper has been Edited successfully");
-                  Get.back();
+                  Get.offAllNamed("/TeacherHomeScreen");
                 } on FirebaseException catch (e) {
                   EasyLoading.dismiss();
                   Get.snackbar("Error", e.message.toString());

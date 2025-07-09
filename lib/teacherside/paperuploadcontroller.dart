@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 class UploadController extends GetxController {
@@ -44,6 +45,7 @@ class UploadController extends GetxController {
     }
 
     try {
+      EasyLoading.show(status: "Loadin....");
       final uid = FirebaseAuth.instance.currentUser?.uid;
 
       await FirebaseFirestore.instance.collection('papers').doc().set({
@@ -57,8 +59,9 @@ class UploadController extends GetxController {
         'visibleAt': Timestamp.fromDate(visibleAt.toUtc()),
         'endTime': Timestamp.fromDate(endTime.toUtc()),
       });
-
+      EasyLoading.dismiss();
       Get.snackbar("Success", "Paper uploaded successfully ✅");
+      Get.offAllNamed("/TeacherHomeScreen");
     } catch (e) {
       Get.snackbar("Upload Failed", e.toString());
     }

@@ -9,6 +9,7 @@ import 'package:fyppaperless/forgetpassword.dart';
 import 'package:fyppaperless/home_screen.dart';
 import 'package:fyppaperless/login_scrren.dart';
 import 'package:fyppaperless/paperattemptingcontroller.dart';
+import 'package:fyppaperless/resultscree.dart';
 import 'package:fyppaperless/signup_screen.dart';
 import 'package:fyppaperless/teacherside/paperEdittingScreen.dart';
 import 'package:fyppaperless/teacherside/stusubmissionlist.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
     final role = box.read("role");
     String initialRoute;
     if (user != null && user.emailVerified) {
-      if (role == "teacher") {
+      if (role == "Teacher") {
         initialRoute = '/TeacherHomeScreen';
       } else if (role == "stu") {
         final controller = Get.put(AttemptController(), permanent: true);
@@ -78,7 +79,8 @@ class MyApp extends StatelessWidget {
             name: ViewStudentSubmissionScreen.id,
             page: () => const ViewStudentSubmissionScreen()),
         GetPage(name: Forgetpassword.id, page: () => const Forgetpassword()),
-        GetPage(name: editProfile.id, page: () => const editProfile())
+        GetPage(name: editProfile.id, page: () => const editProfile()),
+        GetPage(name: Resultscreen.id, page: () => const Resultscreen()),
       ],
     );
   }
