@@ -6,6 +6,8 @@ import 'package:fyppaperless/layouthelper/textfieldwidget.dart';
 import 'package:fyppaperless/paperattemptingcontroller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class AttemptScreen extends StatelessWidget {
   static const id = "/AttemptingScreen";
@@ -15,10 +17,8 @@ class AttemptScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final paperData = Get.arguments as Map<String, dynamic>;
-
     final List questions = paperData["questions"];
     final endTime = (paperData['endTime'] as Timestamp).toDate();
-    print(endTime);
     // ✅ Only update paper and controllers if not same paper
     if (controller.paper.value == null ||
         controller.paper.value!['id'] != paperData['id']) {
@@ -35,6 +35,46 @@ class AttemptScreen extends StatelessWidget {
             .startCountdownUsingServerTime(endTime); // ✅ runs now → endTime
       }
     });
+    const String geminiApiKey = "AIzaSyBMoPHfc04IcCFOvLTvmhK7r6brwGdzYGg";
+
+    Future<double> getAIScore(List<Map<String, String>> combinedQA) async {
+      final url = Uri.parse(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=$geminiApiKey",
+      );
+
+      // Prepare prompt
+      String prompt =
+          "You are a strict teacher. Evaluate the following answers. "
+          "Return only the total score out of 10.\n\n";
+      for (var i = 0; i < combinedQA.length; i++) {
+        prompt += "Q${i + 1}: ${combinedQA[i]["question"]}\n";
+        prompt += "Student Answer: ${combinedQA[i]["answer"]}\n\n";
+      }
+
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "contents": [
+            {
+              "parts": [
+                {"text": prompt}
+              ]
+            }
+          ]
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final aiText = data["candidates"][0]["content"]["parts"][0]["text"];
+        final scoreMatch = RegExp(r"(\d+(\.\d+)?)").firstMatch(aiText);
+        if (scoreMatch != null) {
+          return double.tryParse(scoreMatch.group(1)!) ?? 0.0;
+        }
+      }
+      return 0.0;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -104,6 +144,36 @@ class AttemptScreen extends StatelessWidget {
                 },
               ),
             ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+                onPressed: () async {
+                  final questions = paperData["questions"];
+                  final answers =
+                      controller.answerControllers.map((e) => e.text).toList();
+
+                  final combinedQA = List.generate(
+                    questions.length,
+                    (i) => {
+                      "question": questions[i]["question"].toString(),
+                      "answer": answers[i].toString(),
+                    },
+                  );
+
+                  EasyLoading.show(status: "Evaluating with AI...");
+                  double aiScore = await getAIScore(combinedQA);
+                  EasyLoading.dismiss();
+
+                  Get.snackbar(
+                    "AI Evaluation Complete",
+                    "Your AI Score: $aiScore / 10",
+                    snackPosition: SnackPosition.BOTTOM,
+                  );
+                },
+                child: const Text("AI Evaluate")),
+
+            const SizedBox(
+              height: 10,
+            ),
 
             /// Manual Submit Button
             ElevatedButton(
@@ -120,7 +190,6 @@ class AttemptScreen extends StatelessWidget {
   void submitPaper(Map<String, dynamic> paperData) async {
     try {
       EasyLoading.show();
-
       final questions = paperData["questions"];
       final box = GetStorage();
       final department = box.read("student_department");
@@ -131,7 +200,6 @@ class AttemptScreen extends StatelessWidget {
       final studentId = FirebaseAuth.instance.currentUser?.uid ?? '';
       final teacherId = paperData['teacherId'];
       final paperId = paperData['id'];
-
       final answers = controller.answerControllers.map((e) => e.text).toList();
       final combinedQA = List.generate(
         questions.length,
@@ -140,7 +208,6 @@ class AttemptScreen extends StatelessWidget {
           "answer": answers[i],
         },
       );
-
       await FirebaseFirestore.instance
           .collection("submissions")
           .doc(paperId)
@@ -158,7 +225,6 @@ class AttemptScreen extends StatelessWidget {
         'rollcall': rollcall,
         'Papertitle': paperData["title"]
       });
-
       EasyLoading.dismiss();
       Get.snackbar("Submitted", "Your paper has been submitted successfully");
       controller.setupPaperStream();

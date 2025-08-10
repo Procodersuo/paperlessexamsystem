@@ -6,13 +6,10 @@ import 'package:get/get.dart';
 
 class StudentSubmissionListScreen extends StatelessWidget {
   static const id = "/StudentSubmissionList";
-
   const StudentSubmissionListScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     final paperId = Get.arguments as String;
-
     return Scaffold(
       appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.white),
@@ -44,7 +41,6 @@ class StudentSubmissionListScreen extends StatelessWidget {
               final doc = students[index];
               final data = doc.data() as Map<String, dynamic>;
               final studentId = doc.id;
-
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),

@@ -131,7 +131,7 @@ class PaperUploadScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: MyButton(
-                        bgColor: Colors.blue,
+                        bgColor: Colors.green,
                         foregrngColor: Colors.white,
                         myText: "ADD Question",
                         onTap: () {
@@ -143,7 +143,7 @@ class PaperUploadScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: MyButton(
-                        bgColor: Colors.blue,
+                        bgColor: Colors.green,
                         foregrngColor: Colors.white,
                         myText: "Remove Last",
                         onTap: () {
@@ -156,7 +156,11 @@ class PaperUploadScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
                 onPressed: () {
+
                   controllerDateTime
                       .pickVisibleTime(); // ✅ logic handled in controller
                 },
@@ -164,12 +168,18 @@ class PaperUploadScreen extends StatelessWidget {
                       controllerDateTime.visibleAt.value == null
                           ? "Pick Paper Release Time"
                           : "Releases: ${controllerDateTime.visibleAt.value!.toLocal()}",
+                  style: const TextStyle(
+                    color: Colors.white
+                  ),
                     )),
               ),
               const SizedBox(
                 height: 20,
               ),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red
+                ),
                 onPressed: () {
                   controllerEndTime
                       .pickVisibleTime(); // ✅ logic handled in controller
@@ -178,12 +188,17 @@ class PaperUploadScreen extends StatelessWidget {
                       controllerEndTime.endingTimw.value == null
                           ? "Pick Paper Ending Time"
                           : "Releases: ${controllerEndTime.endingTimw.value!.toLocal()}",
-                    )),
+                  style: const TextStyle(
+                    color: Colors.white
+                  ),
+                    )
+
+                ),
               ),
               const SizedBox(height: 20),
 
               MyButton(
-                  bgColor: Colors.blue,
+                  bgColor: Colors.green,
                   foregrngColor: Colors.white,
                   myText: "Upload Your Paper",
                   onTap: () {

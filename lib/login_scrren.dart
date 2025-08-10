@@ -47,7 +47,7 @@ class LoginScreen extends StatelessWidget {
                     textStyle: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
-                        color: Colors.blue),
+                        color: Colors.green),
                   ),
                 ),
               ),
@@ -55,7 +55,7 @@ class LoginScreen extends StatelessWidget {
                 height: 10,
               ),
               MyButton(
-                bgColor: Colors.blue,
+                bgColor: Colors.green,
                 foregrngColor: Colors.white,
                 myText: "LOGIN",
                 onTap: () {
@@ -91,7 +91,7 @@ class LoginScreen extends StatelessWidget {
                         textStyle: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: Colors.blue),
+                            color: Colors.green),
                       ),
                     ),
                   ),

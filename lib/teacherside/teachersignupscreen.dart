@@ -49,7 +49,7 @@ class teachersignupscreen extends StatelessWidget {
               const SizedBox(height: 20),
               MyButton(
                 myText: "Register",
-                bgColor: Colors.blue,
+                bgColor: Colors.green,
                 foregrngColor: Colors.white,
                 onTap: () {
                   if (securityKeyController.text.toString() == "THX09#21") {
@@ -81,7 +81,7 @@ class teachersignupscreen extends StatelessWidget {
                   "Login ",
                   style: GoogleFonts.poppins(
                     textStyle:
-                        const TextStyle(fontSize: 15, color: Colors.blue),
+                        const TextStyle(fontSize: 15, color: Colors.green),
                   ),
                 ),
               ),

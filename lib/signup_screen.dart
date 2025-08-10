@@ -79,7 +79,7 @@ class SignupScreen extends StatelessWidget {
               const SizedBox(height: 20),
               MyButton(
                 myText: "Register",
-                bgColor: Colors.blue,
+                bgColor: Colors.green,
                 foregrngColor: Colors.white,
                 onTap: () {
                   controller.signup(
@@ -119,7 +119,7 @@ class SignupScreen extends StatelessWidget {
                         textStyle: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: Colors.blue),
+                            color: Colors.green),
                       ),
                     ),
                   ),
@@ -136,7 +136,7 @@ class SignupScreen extends StatelessWidget {
                   "Signup As Teacher",
                   style: GoogleFonts.poppins(
                     textStyle: const TextStyle(
-                        color: Colors.blue,
+                        color: Colors.green,
                         fontSize: 13,
                         fontWeight: FontWeight.w600),
                   ),
