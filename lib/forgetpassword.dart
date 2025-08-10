@@ -16,6 +16,17 @@ class Forgetpassword extends StatelessWidget {
         Get.put(ForgetpasswordController());
 
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.green,
+        centerTitle: true,
+        title: const Text(
+          "Forget Password",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -34,7 +45,7 @@ class Forgetpassword extends StatelessWidget {
                 height: 30,
               ),
               MyButton(
-                  bgColor: Colors.blue,
+                  bgColor: Colors.green,
                   foregrngColor: Colors.white,
                   myText: "Forget Password",
                   onTap: () {

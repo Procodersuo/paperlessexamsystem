@@ -28,10 +28,11 @@ class UploadController extends GetxController {
     List<Map<String, String>> questions = [];
     for (var pair in qaList) {
       String question = pair['question']?.text.trim() ?? '';
-      String answer = pair['answer']?.text.trim() ?? '';
 
-      if (question.isNotEmpty && answer.isNotEmpty) {
-        questions.add({'question': question, 'answer': answer});
+      if (question.isNotEmpty) {
+        questions.add({
+          'question': question,
+        });
       }
     }
 

@@ -10,7 +10,6 @@ import '../layouthelper/dropdown.dart';
 class PaperUploadScreen extends StatelessWidget {
   static String id = "/PaperUploadScreen";
   PaperUploadScreen({super.key});
-
   final RxString department = ''.obs;
   final RxString semester = ''.obs;
   final RxString section = ''.obs;
@@ -18,14 +17,12 @@ class PaperUploadScreen extends StatelessWidget {
   final RxList<Map<String, TextEditingController>> qaList =
       <Map<String, TextEditingController>>[].obs;
   // Date Time Picking
-
   final UploadController controller = Get.put(UploadController());
   final Datetimepicker controllerDateTime = Get.put(Datetimepicker());
   final Endtimepicker controllerEndTime = Get.put(Endtimepicker());
   void addQuestion() {
     qaList.add({
       'question': TextEditingController(),
-      'answer': TextEditingController(),
     });
   }
 
@@ -113,12 +110,6 @@ class PaperUploadScreen extends StatelessWidget {
                               hinttext: "Please Enter Answer For The Questions",
                             ),
                             const SizedBox(height: 8),
-                            Text("Answer ${index + 1}"),
-                            MyTextField(
-                              lines: 5,
-                              mycontroller: qaList[index]['answer'],
-                              hinttext: "Please Enter Answer For The Questions",
-                            )
                           ],
                         ),
                       );
@@ -160,7 +151,6 @@ class PaperUploadScreen extends StatelessWidget {
                   backgroundColor: Colors.red,
                 ),
                 onPressed: () {
-
                   controllerDateTime
                       .pickVisibleTime(); // ✅ logic handled in controller
                 },
@@ -168,18 +158,14 @@ class PaperUploadScreen extends StatelessWidget {
                       controllerDateTime.visibleAt.value == null
                           ? "Pick Paper Release Time"
                           : "Releases: ${controllerDateTime.visibleAt.value!.toLocal()}",
-                  style: const TextStyle(
-                    color: Colors.white
-                  ),
+                      style: const TextStyle(color: Colors.white),
                     )),
               ),
               const SizedBox(
                 height: 20,
               ),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red
-                ),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () {
                   controllerEndTime
                       .pickVisibleTime(); // ✅ logic handled in controller
@@ -188,12 +174,8 @@ class PaperUploadScreen extends StatelessWidget {
                       controllerEndTime.endingTimw.value == null
                           ? "Pick Paper Ending Time"
                           : "Releases: ${controllerEndTime.endingTimw.value!.toLocal()}",
-                  style: const TextStyle(
-                    color: Colors.white
-                  ),
-                    )
-
-                ),
+                      style: const TextStyle(color: Colors.white),
+                    )),
               ),
               const SizedBox(height: 20),
 

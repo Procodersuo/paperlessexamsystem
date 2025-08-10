@@ -80,6 +80,8 @@ class _ViewStudentSubmissionScreenState
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   onPressed: () async {
                     try {
                       EasyLoading.show();
@@ -100,7 +102,10 @@ class _ViewStudentSubmissionScreenState
                       Get.snackbar("Error", e.toString());
                     }
                   },
-                  child: const Text("Submit Marks"),
+                  child: const Text(
+                    "Submit Marks",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 )
               ],
             ),

@@ -146,6 +146,7 @@ class AttemptScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                 onPressed: () async {
                   final questions = paperData["questions"];
                   final answers =
@@ -169,7 +170,10 @@ class AttemptScreen extends StatelessWidget {
                     snackPosition: SnackPosition.BOTTOM,
                   );
                 },
-                child: const Text("AI Evaluate")),
+                child: const Text(
+                  "AI Evaluate",
+                  style: TextStyle(color: Colors.white),
+                )),
 
             const SizedBox(
               height: 10,
@@ -177,8 +181,14 @@ class AttemptScreen extends StatelessWidget {
 
             /// Manual Submit Button
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
               onPressed: () => submitPaper(paperData),
-              child: const Text("Submit Answers"),
+              child: const Text(
+                "Submit Answers",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),

@@ -48,12 +48,6 @@ class PaperEdittingScreen extends StatelessWidget {
                       MyTextField(
                         mycontroller: controller.qaList[index]['question'],
                       ),
-                      Text("Answer${index + 1}"),
-                      const SizedBox(height: 8),
-                      MyTextField(
-                        mycontroller: controller.qaList[index]['answer'],
-                        lines: 5,
-                      ),
                       const SizedBox(height: 20),
                     ],
                   );

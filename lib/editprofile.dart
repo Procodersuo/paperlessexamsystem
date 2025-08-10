@@ -8,8 +8,9 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'layouthelper/dropdown.dart';
+
 class editProfile extends StatelessWidget {
-  static String id ="/EditProfile";
+  static String id = "/EditProfile";
   const editProfile({super.key});
 
   @override
@@ -18,89 +19,98 @@ class editProfile extends StatelessWidget {
     final box = GetStorage();
     String name = box.read("student_name");
     String rollNumber = box.read("student_rollnumber");
-    String semesterGet= box.read("student_semester");
-    String sectionGet =box.read("student_section");
-    String departmentGet =box.read("student_department");
-    final TextEditingController nameController = TextEditingController(text: name);
-    final TextEditingController rollNumberController = TextEditingController(text: rollNumber);
+    String semesterGet = box.read("student_semester");
+    String sectionGet = box.read("student_section");
+    String departmentGet = box.read("student_department");
+    final TextEditingController nameController =
+        TextEditingController(text: name);
+    final TextEditingController rollNumberController =
+        TextEditingController(text: rollNumber);
     final RxString department = departmentGet.obs;
     final RxString semester = semesterGet.obs;
     final RxString section = sectionGet.obs;
 
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.green,
-        title: const Text("Edit Your Profile",style: TextStyle(
-          color: Colors.white
-        ),),
+        title: const Text(
+          "Edit Your Profile",
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      body:  Column(
+      body: Column(
         children: [
           MyTextField(mycontroller: nameController),
-          const SizedBox( height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           MyTextField(mycontroller: rollNumberController),
-          const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           Row(
             children: [
               Expanded(
                 child: Obx(() => MySimpleDropdown(
-                  items: const ["BSSE", "BSIT", "BSCS", "BSDS"],
-                  hintTxt: "Depart",
-                  selectedValue: department.value,
-                  onChanged: (val) => department.value = val,
-                )),
+                      items: const ["BSSE", "BSIT", "BSCS", "BSDS"],
+                      hintTxt: "Depart",
+                      selectedValue: department.value,
+                      onChanged: (val) => department.value = val,
+                    )),
               ),
               Expanded(
                 child: Obx(() => MySimpleDropdown(
-                  items: const ["1", "2", "3", "4", "5", "6", "7", "8"],
-                  hintTxt: "Semester",
-                  selectedValue: semester.value,
-                  onChanged: (val) => semester.value = val,
-                )),
+                      items: const ["1", "2", "3", "4", "5", "6", "7", "8"],
+                      hintTxt: "Semester",
+                      selectedValue: semester.value,
+                      onChanged: (val) => semester.value = val,
+                    )),
               ),
               Expanded(
                 child: Obx(() => MySimpleDropdown(
-                  items: const ["M", "E-A", "E-B", "E-C"],
-                  hintTxt: "Section",
-                  selectedValue: section.value,
-                  onChanged: (val) => section.value = val,
-                )),
+                      items: const ["M", "E-A", "E-B", "E-C"],
+                      hintTxt: "Section",
+                      selectedValue: section.value,
+                      onChanged: (val) => section.value = val,
+                    )),
               )
             ],
           ),
+          const SizedBox(
+            height: 10,
+          ),
+          MyButton(
+              bgColor: Colors.green,
+              foregrngColor: Colors.white,
+              myText: "Update",
+              onTap: () async {
+                try {
+                  EasyLoading.show();
+                  final uid = FirebaseAuth.instance.currentUser?.uid;
+                  if (uid == null) return;
 
-          const SizedBox(height: 10,),
-
-          MyButton(bgColor: Colors.blue, foregrngColor: Colors.white, myText: "Update" ,
-          onTap: () async {
-
-            try {
-              EasyLoading.show();
-              final uid = FirebaseAuth.instance.currentUser?.uid;
-              if (uid == null) return;
-
-              await FirebaseFirestore.instance.collection("StudentsData").doc(
-                  uid).update({
-                'Name': nameController.text.toString(),
-                'department': department.value,
-                'Section': section.value,
-                'Roll Number': rollNumberController.text.toString(),
-                'semester': semester.value
-              });
-              box.write("student_department", department.value);
-              box.write("student_semester", semester.value);
-              box.write("student_section", section.value);
-              EasyLoading.dismiss();
-              Get.snackbar("Updated", "Your profile was successfully updated Restart App");
-
-            }
-            on FirebaseAuthException catch (e) {
-              EasyLoading.dismiss();
-              Get.snackbar('Updation Failed', e.message ?? 'Unknown error');
-            }
-          }
-          )
+                  await FirebaseFirestore.instance
+                      .collection("StudentsData")
+                      .doc(uid)
+                      .update({
+                    'Name': nameController.text.toString(),
+                    'department': department.value,
+                    'Section': section.value,
+                    'Roll Number': rollNumberController.text.toString(),
+                    'semester': semester.value
+                  });
+                  box.write("student_department", department.value);
+                  box.write("student_semester", semester.value);
+                  box.write("student_section", section.value);
+                  EasyLoading.dismiss();
+                  Get.snackbar("Updated",
+                      "Your profile was successfully updated Restart App");
+                } on FirebaseAuthException catch (e) {
+                  EasyLoading.dismiss();
+                  Get.snackbar('Updation Failed', e.message ?? 'Unknown error');
+                }
+              })
         ],
       ),
     );

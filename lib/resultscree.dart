@@ -14,7 +14,11 @@ class Resultscreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Your Results"),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          "Your Results",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.green,
       ),
       body: FutureBuilder<QuerySnapshot>(
@@ -50,8 +54,7 @@ class Resultscreen extends StatelessWidget {
                         Row(
                           children: [
                             const Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 MyTextWidget(
                                   myText: "Exam Title:",
@@ -62,16 +65,15 @@ class Resultscreen extends StatelessWidget {
                             ),
                             const Spacer(),
                             Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 MyTextWidget(
-                                    myText:  examTitle,),
+                                  myText: examTitle,
+                                ),
                                 const SizedBox(height: 4),
                                 const SizedBox(height: 4),
                                 MyTextWidget(
-                                  myText: (data['submittedAt']
-                                  as Timestamp)
+                                  myText: (data['submittedAt'] as Timestamp)
                                       .toDate()
                                       .toLocal()
                                       .toString()
@@ -85,10 +87,7 @@ class Resultscreen extends StatelessWidget {
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 10),
-
-
                       ],
                     ),
                   ),
